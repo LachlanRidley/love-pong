@@ -1,8 +1,8 @@
 Ball = {
 	x = 300,
 	y = 300,
-	radius = 15,
-	speed = 80,
+	radius = 10,
+	speed = 160,
 	direction = -1
 }
 
