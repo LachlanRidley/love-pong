@@ -35,8 +35,13 @@ function love.update(dt)
 
 	ball:move(dt)
 
-	if haveCollided(player, ball) or haveCollided(opponent, ball) then
-		ball:bounce()
+	if haveCollided(player, ball) then
+		bounce(player, ball, false)
+		ball:move(dt)
+	end
+
+	if haveCollided(opponent, ball) then
+		bounce(opponent, ball, true)
 		ball:move(dt)
 	end
 end
@@ -67,9 +72,22 @@ function love.draw()
 	ball:draw()
 end
 
+function bounce(paddle, ball, reverse)
+	local diff = ball.y - paddle.y
+	print(diff)
+	local newAngle = 180 * (diff / paddle.height)
+
+	if reverse then
+		newAngle = newAngle + 180
+	end
+
+	ball:bounce(newAngle) 
+end
+
 function haveCollided(object1, object2)
 	local a = object1:getBBox()
 	local b = object2:getBBox()
 
-	return (math.abs(a.x - b.x) * 2 < (a.width + b.width)) and(math.abs(a.y - b.y) * 2 < (a.height + b.height));
+	-- return (math.abs(a.x - b.x) * 2 < (a.width + b.width)) and(math.abs(a.y - b.y) * 2 < (a.height + b.height));
+	return (math.abs(a.x - b.x) < (a.width + b.width)) and(math.abs(a.y - b.y) < (a.height + b.height));
 end

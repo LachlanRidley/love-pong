@@ -3,7 +3,7 @@ Ball = {
 	y = 300,
 	radius = 10,
 	speed = 160,
-	direction = -1
+	direction = 280
 }
 
 function Ball:new (o)
@@ -18,11 +18,15 @@ function Ball:draw()
 end
 
 function Ball:move(dt)
-	self.x = self.x + self.direction * (self.speed * dt)
+	local distance = self.speed * dt
+
+	self.x = self.x + (distance * math.sin(math.rad(self.direction)))
+	self.y = self.y - (distance * math.cos(math.rad(self.direction)))
 end
 
-function Ball:bounce()
-	self.direction = self.direction * -1
+function Ball:bounce(direction)
+	self.direction = direction
+	self.x = self.x + 10
 end
 
 function Ball:getBBox()
