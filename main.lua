@@ -18,6 +18,8 @@ function love.keyreleased(key)
 end
 
 function love.update(dt)
+	require("lovebird").update()
+
 	if love.keyboard.isDown('a') then
 		playerAction = 'up'
 	elseif love.keyboard.isDown('z') then
@@ -36,12 +38,12 @@ function love.update(dt)
 	ball:move(dt)
 
 	if haveCollided(player, ball) then
-		bounce(player, ball, false)
+		bounce(player, ball, false, dt)
 		ball:move(dt)
 	end
 
 	if haveCollided(opponent, ball) then
-		bounce(opponent, ball, true)
+		bounce(opponent, ball, true, dt)
 		ball:move(dt)
 	end
 end
@@ -72,22 +74,21 @@ function love.draw()
 	ball:draw()
 end
 
-function bounce(paddle, ball, reverse)
+function bounce(paddle, ball, reverse, dt)
 	local diff = ball.y - paddle.y
-	print(diff)
 	local newAngle = 180 * (diff / paddle.height)
 
 	if reverse then
 		newAngle = newAngle + 180
 	end
 
-	ball:bounce(newAngle) 
+	ball:bounce(newAngle, dt) 
 end
 
 function haveCollided(object1, object2)
 	local a = object1:getBBox()
 	local b = object2:getBBox()
 
-	-- return (math.abs(a.x - b.x) * 2 < (a.width + b.width)) and(math.abs(a.y - b.y) * 2 < (a.height + b.height));
-	return (math.abs(a.x - b.x) < (a.width + b.width)) and(math.abs(a.y - b.y) < (a.height + b.height));
+	return (math.abs(a.x - b.x) * 2 < (a.width + b.width)) and(math.abs(a.y - b.y) * 2 < (a.height + b.height));
+	-- return (math.abs(a.x - b.x) < (a.width + b.width)) and(math.abs(a.y - b.y) < (a.height + b.height));
 end
