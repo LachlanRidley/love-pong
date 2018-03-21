@@ -4,7 +4,7 @@ Ball = {
 	x = 300,
 	y = 300,
 	radius = 10,
-	velocity = vector.fromPolar(math.pi * 1.2, 60)
+	velocity = vector.fromPolar(math.pi * 1.1, 100)
 }
 
 function Ball:new (o)
@@ -29,10 +29,10 @@ function Ball:move(dt)
 end
 
 
---[[TODO 
-function Ball:bounce(direction, surfaceAngle, dt)
-
-end--]]
+function Ball:bounce(direction, dt)
+	self.velocity = self.velocity:mirrorOn(vector.fromPolar(math.pi * 0.5,10))
+	self:move(dt)
+end
 
 function Ball:getBBox()
 	return {
