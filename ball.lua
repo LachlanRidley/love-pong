@@ -19,11 +19,6 @@ function Ball:draw()
 end
 
 function Ball:move(dt)
-	-- local distance = self.speed * dt
-
-	--[[self.x = self.x + (distance * math.sin(math.rad(self.direction)))
-	self.y = self.y - (distance * math.cos(math.rad(self.direction)))--]]
-
 	self.x = self.x + self.velocity.x * dt
 	self.y = self.y + self.velocity.y * dt
 end
@@ -43,23 +38,4 @@ function Ball:getBBox()
 	}
 end
 
---[[function Paddle:moveUp(dt)
-	self.y = self.y - (self.speed * dt)
-	self:checkLimits();
-end
-
-function Paddle:moveDown(dt)
-	self.y = self.y + (self.speed * dt)
-	self:checkLimits();
-end
-
-function Paddle:checkLimits()
-	local windowHeight = love.graphics.getHeight()
-	if self.y < 0 then
-		self.y = 0
-	elseif (self.y + self.height) > windowHeight then
-		self.y = windowHeight - self.height
-	end
-end
---]]
 return Ball

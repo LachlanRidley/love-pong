@@ -90,7 +90,6 @@ function haveCollided(object1, object2)
 	local b = object2:getBBox()
 
 	return (math.abs(a.x - b.x) * 2 < (a.width + b.width)) and (math.abs(a.y - b.y) * 2 < (a.height + b.height));
-	-- return (math.abs(a.x - b.x) < (a.width + b.width)) and(math.abs(a.y - b.y) < (a.height + b.height));
 end
 
 function love.conf(t)
