@@ -24,9 +24,22 @@ function Ball:move(dt)
 end
 
 
-function Ball:bounce(direction, dt)
+function Ball:bounceOnLeftEdge(direction, dt)
 	self.velocity = self.velocity:mirrorOn(vector.fromPolar(math.pi * 0.5,10))
 	self:move(dt)
+end
+
+function Ball:bounceOnRightEdge(direction, dt)
+	self.velocity = self.velocity:mirrorOn(vector.fromPolar(math.pi * 1.5,10))
+	self:move(dt)
+end
+
+function Ball:bounceOnTopEdge(direciton, dt)
+	self.velocity = self.velocity:mirrorOn(vector.fromPolar(math.pi * 1, 10))
+end
+
+function Ball:bounceOnBottomEdge(direciton, dt)
+	self.velocity = self.velocity:mirrorOn(vector.fromPolar(math.pi * 0, 10))
 end
 
 function Ball:getBBox()

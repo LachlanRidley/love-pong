@@ -38,13 +38,19 @@ function love.update(dt)
 	ball:move(dt)
 
 	if haveCollided(player, ball) then
-		bounce(player, ball, false, dt)
-		ball:move(dt)
+		ball:bounceOnLeftEdge(ball.velocity, dt)
 	end
 
 	if haveCollided(opponent, ball) then
-		bounce(opponent, ball, true, dt)
-		ball:move(dt)
+		ball:bounceOnRightEdge(ball.velocity, dt)
+	end
+
+	if ball.y - ball.radius < 0 then
+		ball:bounceOnTopEdge(ball.velocity, dt)
+	end
+
+	if ball.y + ball.radius > love.graphics.getHeight() then
+		ball:bounceOnBottomEdge(ball.velocity, dt)
 	end
 end
 
@@ -82,7 +88,7 @@ function bounce(paddle, ball, reverse, dt)
 		newAngle = newAngle + 180
 	end
 
-	ball:bounce(newAngle, dt) 
+	ball:bounceOnLeftEdge(newAngle, dt) 
 end
 
 function haveCollided(object1, object2)
