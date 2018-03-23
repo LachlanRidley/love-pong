@@ -6,7 +6,7 @@
 - [x] Clean up code
 - [x] Implement bouncing on horizontal sides
 - [x] Implement bouncing on opponent paddle
-- [ ] Have ball start at random angle
+- [x] Have ball start at random angle
 - [ ] Implement basic AI player
 - [ ] Implement losing on vertical sides
 - [ ] Implement spin

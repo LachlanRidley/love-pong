@@ -1,6 +1,8 @@
 local Paddle = require 'paddle'
 local Ball = require 'ball'
 
+local vector = require "hump.vector"
+
 local playerAction
 local opponentAction
 
@@ -8,7 +10,12 @@ function love.load()
 	love.window.setTitle("Poooooooooooooooooooooooooooooong!!!!!!")
 	player = Paddle:new()
 	opponent = Paddle:new{x = love.graphics.getWidth() - 35}
-	ball = Ball:new{x = love.graphics.getWidth() / 2, y = love.graphics.getHeight() / 2}
+	
+	ball = Ball:new{
+		x = love.graphics.getWidth() / 2,
+		y = love.graphics.getHeight() / 2,
+		velocity = vector.fromPolar(math.pi * (love.math.random() * 2), 100)
+	}
 end
 
 function love.keyreleased(key)
@@ -30,6 +37,10 @@ function love.update(dt)
 		opponentAction = 'up'
 	elseif love.keyboard.isDown('down') then
 		opponentAction = 'down'
+	end
+
+	if love.keyboard.isDown('r') then
+		love.load()
 	end
 
 	updatePlayer(dt)
