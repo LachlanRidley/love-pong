@@ -33,10 +33,18 @@ function love.update(dt)
 		playerAction = 'down'
 	end
 
-	if love.keyboard.isDown('up') then
-		opponentAction = 'up'
-	elseif love.keyboard.isDown('down') then
-		opponentAction = 'down'
+	-- if love.keyboard.isDown('up') then
+	-- 	opponentAction = 'up'
+	-- elseif love.keyboard.isDown('down') then
+	-- 	opponentAction = 'down'
+	-- end
+
+	if math.abs(ball.velocity:angleTo(vector(1,0))) < (math.pi * 0.5) then
+		if opponent.y < ball.y then
+			opponentAction = 'down'
+		else
+			opponentAction = 'up'
+		end
 	end
 
 	if love.keyboard.isDown('r') then
@@ -49,13 +57,13 @@ function love.update(dt)
 	ball:move(dt)
 
 	if haveCollided(player, ball) 
-		and ball.velocity:angleTo(vector.fromPolar(math.pi * 1.5,10)) < math.abs(math.pi * 0.5) then
+		and math.abs(ball.velocity:angleTo(vector.fromPolar(math.pi * 1.5,10))) < math.pi * 0.5 then
 		
 		ball:bounceOnLeftEdge(ball.velocity, dt)
 	end
 
 	if haveCollided(opponent, ball) 
-		and ball.velocity:angleTo(vector.fromPolar(math.pi * 0.5,10)) < math.abs(math.pi * 0.5) then
+		and math.abs(ball.velocity:angleTo(vector.fromPolar(math.pi * 0.5,10))) < math.pi * 0.5 then
 		
 		ball:bounceOnRightEdge(ball.velocity, dt)
 	end
