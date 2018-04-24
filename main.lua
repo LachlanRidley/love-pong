@@ -3,14 +3,22 @@ local Ball = require 'ball'
 
 local vector = require "hump.vector"
 
-local playerAction
-local opponentAction
+local player_action
+local opponent_action
+
+local state
+local selected_menu_item = 0
 
 local player_score = 0
 local opponent_score = 0
 
 function love.load()
+	state = "menu"
 	love.window.setTitle("Poooooooooooooooooooooooooooooong!!!!!!")
+	-- startPong()
+end
+
+function startPong()
 	player = Paddle:new()
 	opponent = Paddle:new{x = love.graphics.getWidth() - 35}
 	
@@ -18,10 +26,15 @@ function love.load()
 end
 
 function resetBall()
+	offset = math.pi * -0.25
+	if love.math.random() > 0.5 then
+		offset = math.pi * 0.75
+	end
+
 	ball = Ball:new{
 		x = love.graphics.getWidth() / 2,
 		y = love.graphics.getHeight() / 2,
-		velocity = vector.fromPolar(math.pi * (love.math.random() * 2), 200)
+		velocity = vector.fromPolar(offset + math.pi * (love.math.random() * 0.5), 200)
 	}
 end
 
@@ -32,20 +45,69 @@ function love.keyreleased(key)
 end
 
 function love.update(dt)
+	if state == "menu" then
+		if love.keyboard.isDown('up') then
+			selected_menu_item = selected_menu_item - 1
+			if selected_menu_item < 0 then selected_menu_item = 0 end
+		elseif love.keyboard.isDown('down') then
+			selected_menu_item = selected_menu_item + 1
+			if selected_menu_item > 1 then selected_menu_item = 1 end
+		elseif love.keyboard.isDown('return') then
+			if selected_menu_item == 0 then
+				state = "game"
+				startPong()
+			elseif selected_menu_item == 1 then
+				love.event.quit()
+			end
+		end
+	elseif state == "game" then
+		updateGame(dt)
+	end
+end
+
+function love.draw()
 	love.graphics.setBackgroundColor(0,0,0)
 
+	if state == "menu" then
+		local font = love.graphics.newFont(14)
+		love.graphics.setFont(font)
+
+		love.graphics.setColor(1,1,1)
+		love.graphics.print("Poooooooooooooooooooooooooooooong!!!!!!", 10, 20)
+
+		if (selected_menu_item == 0) then
+			love.graphics.setColor(0,1,0)
+		else
+			love.graphics.setColor(1,1,1)
+		end
+
+		love.graphics.print("Play", 10, 40)
+
+		if (selected_menu_item == 1) then
+			love.graphics.setColor(0,1,0)
+		else
+			love.graphics.setColor(1,1,1)
+		end
+
+		love.graphics.print("Quit", 10, 60)
+	elseif state == "game" then
+		drawGame()
+	end
+end
+
+function updateGame(dt)
 	if love.keyboard.isDown('up') then
-		playerAction = 'up'
+		player_action = 'up'
 	elseif love.keyboard.isDown('down') then
-		playerAction = 'down'
+		player_action = 'down'
 	end
 
 	-- check if AI player needs to move
 	if math.abs(ball.velocity:angleTo(vector(1,0))) < (math.pi * 0.5) then
 		if opponent.y < ball.y then
-			opponentAction = 'down'
+			opponent_action = 'down'
 		else
-			opponentAction = 'up'
+			opponent_action = 'up'
 		end
 	end
 
@@ -87,33 +149,47 @@ function love.update(dt)
 	-- check if ball has hit player's edge
 	if ball.x < 0 then
 		resetBall()
-		
-		-- add point to opponent score
 		opponent_score = opponent_score + 1
+
+		if opponent_score >= 3 then
+			love.window.showMessageBox("Poooooooooooooooooooooooooooooong", "You lose!", "info", true)
+			state = "menu"
+		end
+	end
+
+	-- check if ball has hit opponents's edge
+	if ball.x > love.graphics.getWidth() then
+		resetBall()
+		player_score = player_score + 1
+
+		if player_score >= 3 then
+			love.window.showMessageBox("Poooooooooooooooooooooooooooooong", "You win!", "info", true)
+			state = "menu"
+		end
 	end
 end
 
 function updatePlayer(dt)
-	if playerAction == 'up' then
+	if player_action == 'up' then
 		player:moveUp(dt)
-	elseif playerAction == 'down' then
+	elseif player_action == 'down' then
 		player:moveDown(dt)
 	end
 
-	playerAction = ""
+	player_action = ""
 end
 
 function updateOpponent(dt)
-	if opponentAction == 'up' then
+	if opponent_action == 'up' then
 		opponent:moveUp(dt)
-	elseif opponentAction == 'down' then
+	elseif opponent_action == 'down' then
 		opponent:moveDown(dt)
 	end
 
-	opponentAction = ""
+	opponent_action = ""
 end
 
-function love.draw()
+function drawGame()
 	-- print score
 	local text = tostring(player_score) .. " - " .. tostring(opponent_score)
 	local font = love.graphics.newFont(20)
