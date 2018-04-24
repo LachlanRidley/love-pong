@@ -12,7 +12,7 @@
 - [x] Implement losing on vertical sides
 - [x] Implement scoring
 	- Should move to where the ball is going to be, not try and get to its current Y
-- [ ] Implement a basic main menu
+- [x] Implement a basic main menu
 - [x] Make ball's starting direction sane
 	- Meaning have it aimed at the left or right wall, not the top or bottom
 - [ ] Bouncing only works like half the time
