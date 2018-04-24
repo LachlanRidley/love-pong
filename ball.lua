@@ -4,7 +4,7 @@ Ball = {
 	x = 300,
 	y = 300,
 	radius = 10,
-	velocity = vector.fromPolar(math.pi * 1.1, 100)
+	velocity = vector.fromPolar(math.pi * 1.1, 150)
 }
 
 function Ball:new (o)

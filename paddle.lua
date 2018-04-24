@@ -3,7 +3,7 @@ Paddle = {
 	y = 300,
 	width = 15,
 	height = 120,
-	speed = 80
+	speed = 160
 }
 
 function Paddle:new (o)
